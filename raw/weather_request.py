@@ -4,7 +4,7 @@ from datetime import datetime as dt
 
 WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather/"
 
-API_KEY = '95d1e152fdc3e153ef7c417eed82fe7d'
+
 
 geo_locations = {
     "Nagano": (36.65, 138.18333)
