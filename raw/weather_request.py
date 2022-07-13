@@ -54,11 +54,7 @@ def request_new_weather_data():
             # Create a dictionary to represent the stored data
             # To view all accessible data see: https://openweathermap.org/current#current_JSON
             weather_data = {
-<<<<<<< HEAD
-                "Country": json_data["sys"]["country"],
-=======
                 "Country": json_data["sys"]['country'],
->>>>>>> origin/main
                 "Precipitation": json_data["weather"][0]['main'],
                 "Precipitation description": json_data["weather"][0]['description'], # [0] because for some reason it's a single element list?
                 "Temperature": json_data["main"]['temp'],
