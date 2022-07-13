@@ -1,6 +1,17 @@
 import requests, json
 import pandas as pd
 from datetime import datetime as dt 
+import os
+import configparser
+ 
+# Initializes configuration from the config.ini file
+config = configparser.ConfigParser()
+config.read(CURR_DIR_PATH + "/config.ini")
+ 
+# Fetches the api key from your config.ini file
+API_KEY = config.get("DEV", "API_KEY")
+ 
+
 
 WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather/"
 
