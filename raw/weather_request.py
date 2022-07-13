@@ -1,6 +1,8 @@
-import requests, json,os,configparser
+import requests, json, os, configparser
 import pandas as pd
 from datetime import datetime as dt 
+
+
 
 
 CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -15,11 +17,14 @@ API_KEY = config.get("DEV", "API_KEY")
 WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather/"
 
 
-
 geo_locations = {
     "Hokuto": (35.84, 138.40),
     "Hjärup": (55.67, 13.13),
-    "Melbourne": (-37.83, 144.87)
+    "Melbourne": (-37.83, 144.87),
+    "Ljubljana": (46.056946, 14.505751),
+    "Vitoria": (-20.3194, -40.3378),
+    "Valencia": (39.466667, -0.375000)
+
 }
 
 
@@ -49,7 +54,11 @@ def request_new_weather_data():
             # Create a dictionary to represent the stored data
             # To view all accessible data see: https://openweathermap.org/current#current_JSON
             weather_data = {
+<<<<<<< HEAD
                 "Country": json_data["sys"]["country"],
+=======
+                "Country": json_data["sys"]['country'],
+>>>>>>> origin/main
                 "Precipitation": json_data["weather"][0]['main'],
                 "Precipitation description": json_data["weather"][0]['description'], # [0] because for some reason it's a single element list?
                 "Temperature": json_data["main"]['temp'],
