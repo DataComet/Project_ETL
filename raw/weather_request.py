@@ -17,7 +17,9 @@ WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather/"
 
 
 geo_locations = {
-    "Nagano": (36.65, 138.18333)
+    "Hokuto": (35.84, 138.40),
+    "Hjärup": (55.67, 13.13),
+    "Melbourne": (-37.83, 144.87)
 }
 
 
@@ -47,6 +49,7 @@ def request_new_weather_data():
             # Create a dictionary to represent the stored data
             # To view all accessible data see: https://openweathermap.org/current#current_JSON
             weather_data = {
+                "Country": json_data["sys"]["country"],
                 "Precipitation": json_data["weather"][0]['main'],
                 "Precipitation description": json_data["weather"][0]['description'], # [0] because for some reason it's a single element list?
                 "Temperature": json_data["main"]['temp'],
