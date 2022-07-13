@@ -12,13 +12,6 @@ config.read(CURR_DIR_PATH + "/config.ini")
  
 # Fetches the api key from your config.ini file
 API_KEY = config.get("DEV", "API_KEY")
- 
-
-
-
-
-
-
 
 # Initializes configuration from the config.ini file
 config = configparser.ConfigParser()
@@ -32,9 +25,17 @@ WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather/"
 
 
 geo_locations = {
+
     "Vienna": (48.210033, 16.363449),
     "Simbabwe": (-17.824858, 31.053028),
-    "Kiev": (50.450001, 30.523333)
+    "Kiev": (50.450001, 30.523333),
+    "Hokuto": (35.84, 138.40),
+    "Hjärup": (55.67, 13.13),
+    "Melbourne": (-37.83, 144.87),
+    "Ljubljana": (46.056946, 14.505751),
+    "Vitoria": (-20.3194, -40.3378),
+    "Valencia": (39.466667, -0.375000)
+
 }
 
 
