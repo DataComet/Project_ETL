@@ -2,6 +2,9 @@ import requests, json, os, configparser
 import pandas as pd
 from datetime import datetime as dt 
 
+
+
+
 CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 # Initializes configuration from the config.ini file
