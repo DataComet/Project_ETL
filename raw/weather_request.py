@@ -60,27 +60,32 @@ def request_new_weather_data():
         r = requests.get(WEATHER_URL, params=params)
         
         
-        print("url:", r.url) # Should ressemble link from above, else check params dictionary
-        print("http code:", r.status_code) # Should be 200, else check key
+        #print("url:", r.url) # Should ressemble link from above, else check params dictionary
+        #print("http code:", r.status_code) # Should be 200, else check key
         if r.status_code == 200: # If connection is successful (200: http ok)
             json_data = r.json() # Get result in json
+            jsonString = json.dumps(json_data)
+            jsonFile = open("json_data.json", "w")
+            jsonFile.write(str(jsonString))
+            jsonFile.close()
 
             # Create a dictionary to represent the stored data
             # To view all accessible data see: https://openweathermap.org/current#current_JSON
-            weather_data = {
-                "Country": json_data["sys"]['country'],
-                "Precipitation": json_data["weather"][0]['main'],
-                "Precipitation description": json_data["weather"][0]['description'], # [0] because for some reason it's a single element list?
-                "Temperature": json_data["main"]['temp'],
-                "Air pressure": json_data["main"]['pressure'],
-                "clouds": json_data["clouds"],
-                "Date":  dt.fromtimestamp(json_data["dt"])
-            }
-            # Flattens dictionaries (normalize) because a dataframe can't contain nested dictionaries
-            # E.g. Internal dictionary {"weather": {"temp": 275, "max_temp": 289}}
-            # becomes {"weather.temp": 275, "weather.max_temp", 289}
-            weather_data = pd.json_normalize(weather_data) 
-            print(weather_data)
+            # weather_data = {
+            #     "Country": json_data["sys"]['country'],
+            #     "Precipitation": json_data["weather"][0]['main'],
+            #     #"Precipitation description": json_data["weather"][0]['description'], # [0] because for some reason it's a single element list?
+            #     #"Temperature": json_data["main"]['temp'],
+            #     #"Air pressure": json_data["main"]['pressure'],
+            #     "clouds": json_data["clouds"],
+            #     "Date":  dt.fromtimestamp(json_data["dt"])
+            # }
+            # # Flattens dictionaries (normalize) because a dataframe can't contain nested dictionaries
+            # # E.g. Internal dictionary {"weather": {"temp": 275, "max_temp": 289}}
+            # # becomes {"weather.temp": 275, "weather.max_temp", 289}
+            # weather_data = pd.json_normalize(weather_data) 
+            # df = pd.DataFrame(weather_data)
+            # print(df)
 
 
 request_new_weather_data()
