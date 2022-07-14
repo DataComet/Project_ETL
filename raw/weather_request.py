@@ -3,6 +3,7 @@ import pandas as pd
 from datetime import datetime as dt 
 import os
 import configparser
+import io
 
 CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
  
@@ -22,7 +23,7 @@ API_KEY = config.get("DEV", "API_KEY")
 
 #WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather/"
 
-#WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast?"
+WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast?"
 
 cnt = 40
 
@@ -43,6 +44,10 @@ geo_locations = {
 
 }
 
+def save_response(path, json_data):
+    file = io.open(path, "w")
+    file.write(str(json_data))
+    file.close()
 
 def request_new_weather_data():
     # For every city, fetch and store weather data
@@ -69,6 +74,7 @@ def request_new_weather_data():
         if r.status_code == 200:
             # print(r.json())
             json_response = r.json()
+            save_response(CURR_DIR_PATH + f"/{city}_json_data.json", json_response)
             json_forcast = json_response["list"]
             for json_data in json_forcast:
                 weather_data = {
@@ -82,9 +88,8 @@ def request_new_weather_data():
                 }
                 data.append(weather_data)
     df = pd.DataFrame.from_dict(data)
-    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-        print(df)
-
+    df.to_json(CURR_DIR_PATH + f"/../harmonized/{str(dt.today().date()).replace(' ', '_')}.json")
+    
 
         #daily = []
         
