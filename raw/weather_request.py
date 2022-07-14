@@ -20,7 +20,9 @@ config.read(CURR_DIR_PATH + "/config.ini")
 # Fetches the api key from your config.ini file
 API_KEY = config.get("DEV", "API_KEY")
 
-WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast?"
+#WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather/"
+
+#WEATHER_URL = "https://api.openweathermap.org/data/2.5/forecast?"
 
 cnt = 40
 
@@ -44,8 +46,11 @@ geo_locations = {
 
 def request_new_weather_data():
     # For every city, fetch and store weather data
-    
+
+    data = []
+
     for city in geo_locations:
+        
         (lat, lon) = geo_locations[city]
 
         # The parameters for the REST API call
@@ -60,27 +65,48 @@ def request_new_weather_data():
         # URL using the params parameter will become:
         #   https://api.openweathermap.org/data/2.5/weather?lat=...&lon=...&appid=<your_key>
         r = requests.get(WEATHER_URL, params=params)
-        daily = []
         
-        print("url:", r.url) # Should ressemble link from above, else check params dictionary
-        print("http code:", r.status_code) # Should be 200, else check key
-        if r.status_code == 200: # If connection is successful (200: http ok)
-            json_data = r.json() # Get result in json
+        if r.status_code == 200:
+            # print(r.json())
+            json_response = r.json()
+            json_forcast = json_response["list"]
+            for json_data in json_forcast:
+                weather_data = {
+                    "Country": city,
+                    "Precipitation": json_data["weather"][0]['main'],
+                    "Precipitation description": json_data["weather"][0]['description'], # [0] because for some reason it's a single element list?
+                    "Temperature": json_data["main"]['temp'],
+                    "Air pressure": json_data["main"]['pressure'],
+                    "clouds": json_data["clouds"],
+                    "Date":  dt.fromtimestamp(json_data["dt"])
+                }
+                data.append(weather_data)
+    df = pd.DataFrame.from_dict(data)
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+        print(df)
+
+
+        #daily = []
+        
+        #print("url:", r.url) # Should ressemble link from above, else check params dictionary
+        #print("http code:", r.status_code) # Should be 200, else check key
+        #if r.status_code == 200: # If connection is successful (200: http ok)
+            #json_data = r.json() # Get result in json
             # Create a dictionary to represent the stored data
             # To view all accessible data see: https://openweathermap.org/current#current_JSON
-            x = 0
+            #x = 0
 
-            for i in json_data['list']:
-                daily.append(i["main"]['pressure'])
-                daily.append(i["main"]['temp'])
-                daily.append(i["weather"][0]['main'])
-                daily.append(dt.fromtimestamp(i['dt']))
-                x += 1
+            #for i in json_data['list']:
+                #daily.append(i["main"]['pressure'])
+                #daily.append(i["main"]['temp'])
+                #daily.append(i["weather"][0]['main'])
+                #daily.append(dt.fromtimestamp(i['dt']))
+                #x += 1
                 #print(x, daily)
-            df = pd.DataFrame.from_dict(daily)
+            #df = pd.DataFrame.from_dict(daily)
             #daily = pd.json_normalize(daily) 
             #df = pd.DataFrame.from_dict(daily)
-            print(df)
+            #print(df)
      
             # weather_data = {
             #     "Country":json_data['city']['country'],
@@ -105,7 +131,5 @@ def request_new_weather_data():
 # def get_daily_data(_d=data):
 #     daily= []
 #     for i in json_data:
-
-            
 
 request_new_weather_data()
