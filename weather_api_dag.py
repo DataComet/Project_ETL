@@ -12,7 +12,7 @@ from airflow.operators.python_operator import PythonOperator, BranchPythonOperat
 from airflow.operators.bash import BashOperator
 from sqlalchemy import create_engine
 
-engine=create_engine("postgresql+psycopg2://weather:abc123@localhost:5432/weather")
+engine=create_engine("postgresql+psycopg2://kenfr:Kaffe87.@localhost:5432/weather")
 
 def load_to_database():
 
