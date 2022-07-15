@@ -10,6 +10,15 @@ import configparser
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
 from airflow.operators.bash import BashOperator
+from sqlalchemy import create_engine
+
+engine=create_engine("postgresql+psycopg2://weather:abc123@localhost:5432/weather")
+
+def load_to_database():
+
+    df = pd.read_csv('formated_data.csv')
+    df.to_sql('weather_forecast', engine, if_exists= 'replace', index= False)
+    engine.dispose()
 
 CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -124,5 +133,10 @@ with DAG("weather_forecast", start_date=dt(2022, 7, 13),
         python_callable=format_harmonized_data
 
     )
+    
+    database_task = PythonOperator(
+    task_id="load_to_database",
+    python_callable=load_to_database
+    )
 
-    load_task >> harmonize_task >> format_task
+    load_task >> harmonize_task >> format_task >> database_task
