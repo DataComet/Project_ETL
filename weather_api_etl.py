@@ -7,6 +7,15 @@ from datetime import datetime as dt
 import os
 import io
 import configparser
+from sqlalchemy import create_engine
+
+engine=create_engine("postgresql+psycopg2://weather:abc123@localhost:5432/weather")
+
+def load_to_database():
+
+    df = pd.read_csv('formated_data.csv')
+    df.to_sql('weather_forecast', engine, if_exists= 'replace', index= False)
+    engine.dispose()
 
 CURR_DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -102,6 +111,7 @@ def transform_harmonized_to_data_frame():
     df.to_csv("formated_data.csv",index=False)
 
 if __name__ == "__main__":
-    load_weather_data()
-    harmonize_weather_data()
-    transform_harmonized_to_data_frame()
+    #load_weather_data()
+    #harmonize_weather_data()
+    #transform_harmonized_to_data_frame()
+    load_to_database()
