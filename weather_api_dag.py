@@ -9,13 +9,19 @@ import io
 import configparser
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator, BranchPythonOperator
+from airflow.providers.postgres.operators.postgres import PostgresOperator
 from airflow.operators.bash import BashOperator
 from sqlalchemy import create_engine
+import credentials
 
-engine=create_engine("postgresql+psycopg2://kenfr:Kaffe87.@localhost:5432/weather")
+DB = credentials.database
+USER = credentials.user
+PASS = credentials.password
+
+#engine=create_engine("postgresql+psycopg2://weather:abc123@localhost:5432/weather")
 
 def load_to_database():
-
+    engine=create_engine(f"postgresql+psycopg2://{USER}:{PASS}@localhost:5432/{DB}")
     df = pd.read_csv('formated_data.csv')
     df.to_sql('weather_forecast', engine, if_exists= 'replace', index= False)
     engine.dispose()
